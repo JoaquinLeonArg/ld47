@@ -1,24 +1,100 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Objects/PlayerHarmer.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Images/logo.png" type="Texture" id=2]
+[ext_resource path="res://Images/zorro.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/WolfEnemy.gd" type="Script" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 64.0
+radius = 16.0
+
+[sub_resource type="Animation" id=2]
+resource_name = "Left"
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "Right"
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
 
 [node name="WolfEnemy" type="KinematicBody2D"]
 collision_layer = 4
-collision_mask = 0
+collision_mask = 8
+script = ExtResource( 3 )
+speed = 120
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -12 )
+texture = ExtResource( 2 )
+hframes = 4
+frame = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
-[node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 0.07, 0.07 )
-texture = ExtResource( 2 )
-
 [node name="PlayerHarmer" parent="." instance=ExtResource( 1 )]
-damage = 30
-knockback = 1000
+damage = 35
+knockback = 600
+radius = 16.0
+
+[node name="CollisionShape2D" parent="PlayerHarmer" index="0"]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Left = SubResource( 2 )
+anims/Right = SubResource( 3 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 
 [editable path="PlayerHarmer"]

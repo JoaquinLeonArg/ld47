@@ -13,7 +13,7 @@ func _on_Player_hp_change(hp):
 		self.tween.start()
 
 func _process(delta):
-	if Input.is_action_just_pressed("ui_accept"):
+	if self.modulate.a == 1 and Input.is_action_just_pressed("use"):
 		self.player.respawn()
 		self.tween.interpolate_property(self, "modulate:a",
 			1, 0, 1,

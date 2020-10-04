@@ -1,9 +1,9 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Scripts/GameCamera.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Images/hp_bar.png" type="Texture" id=3]
-[ext_resource path="res://Images/hunger_bar.png" type="Texture" id=4]
+[ext_resource path="res://Images/bar_green_smalll.png" type="Texture" id=3]
+[ext_resource path="res://Images/bar_bg_small.png" type="Texture" id=4]
 [ext_resource path="res://Images/bar_bg.png" type="Texture" id=5]
 [ext_resource path="res://Scripts/FoodBar.gd" type="Script" id=6]
 [ext_resource path="res://Scripts/HPBar.gd" type="Script" id=7]
@@ -13,6 +13,39 @@
 [ext_resource path="res://Fonts/CyborgSister.ttf" type="DynamicFontData" id=11]
 [ext_resource path="res://Scripts/Death.gd" type="Script" id=12]
 [ext_resource path="res://Images/foreground-fx.png" type="Texture" id=13]
+[ext_resource path="res://Objects/UpgradeUI.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Images/bar_red.png" type="Texture" id=15]
+[ext_resource path="res://Objects/Obelisk.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Objects/SmallRock.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Objects/Tree.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Images/money.png" type="Texture" id=19]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Control
+
+func _ready():
+	self.visible = true
+"
+
+[sub_resource type="DynamicFont" id=5]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 11 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 11 )
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends RichTextLabel
+
+
+
+func _on_Player_mystical_change(points):
+	self.bbcode_text = \"[right]\" + String(points) + \"[/right]\"
+"
 
 [sub_resource type="DynamicFont" id=1]
 size = 96
@@ -22,23 +55,481 @@ font_data = ExtResource( 11 )
 
 [node name="GameScene" type="Node2D"]
 
-[node name="Enemies" type="Node2D" parent="."]
+[node name="Static" type="YSort" parent="."]
+
+[node name="Tree" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 249.134, -30.5977 )
+
+[node name="Tree3" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 718.711, 137.548 )
+
+[node name="Tree4" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 782.278, -241.805 )
+
+[node name="Tree5" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 525.959, 367.209 )
+
+[node name="Tree6" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 468.543, 402.069 )
+
+[node name="Tree7" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 208.123, 590.72 )
+
+[node name="Tree8" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -58.4485, 531.254 )
+
+[node name="Tree9" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -316.818, 447.181 )
+
+[node name="Tree10" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -480.862, 283.137 )
+
+[node name="Tree11" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -694.12, 180.609 )
+
+[node name="Tree12" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -653.109, -118.771 )
+
+[node name="Tree13" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -355.779, 57.576 )
+
+[node name="Tree14" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -183.532, -291.018 )
+
+[node name="Tree15" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 117.899, -631.409 )
+
+[node name="Tree16" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -230.695, -608.853 )
+
+[node name="Tree17" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 339.359, -539.135 )
+
+[node name="Tree18" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 558.768, -457.112 )
+
+[node name="Tree19" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 349.611, -264.361 )
+
+[node name="Tree20" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 124.051, -317.675 )
+
+[node name="Tree21" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -13.3364, -467.365 )
+
+[node name="Tree22" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -525.974, -360.736 )
+
+[node name="Tree23" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -919.681, 131.396 )
+
+[node name="Tree24" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -919.681, 131.396 )
+
+[node name="Tree25" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -245.049, 297.491 )
+
+[node name="Tree26" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -218.392, 367.21 )
+
+[node name="Tree27" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 201.972, 322.098 )
+
+[node name="Tree28" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 708.458, 518.951 )
+
+[node name="Tree29" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 927.867, 322.097 )
+
+[node name="Tree30" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 905.311, 41.1718 )
+
+[node name="Tree31" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 546.464, -133.125 )
+
+[node name="Tree32" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 484.948, -94.1647 )
+
+[node name="Tree33" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -91.2573, -725.735 )
+
+[node name="Tree34" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -435.75, -682.673 )
+
+[node name="Tree35" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -651.058, -516.579 )
+
+[node name="Tree36" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( -728.979, -364.838 )
+
+[node name="SmallRock" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -231.688, 102.913 )
+
+[node name="SmallRock2" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 88.8136, -205.091 )
+
+[node name="SmallRock5" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 219.66, -166.866 )
+
+[node name="SmallRock6" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -204.489, -149.224 )
+
+[node name="SmallRock7" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -141.789, -327.825 )
+
+[node name="SmallRock8" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 278.112, -395.275 )
+
+[node name="SmallRock9" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 147.012, -555.825 )
+
+[node name="SmallRock10" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -106.639, -619.476 )
+
+[node name="SmallRock11" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -179.789, -551.076 )
+
+[node name="SmallRock12" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -353.64, -423.775 )
+
+[node name="SmallRock13" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -484.74, -241.375 )
+
+[node name="SmallRock14" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -455.29, -79.874 )
+
+[node name="SmallRock15" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -551.24, 53.1265 )
+
+[node name="SmallRock16" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -474.29, 182.327 )
+
+[node name="SmallRock17" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -268.139, 257.377 )
+
+[node name="SmallRock18" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -87.6387, 270.677 )
+
+[node name="SmallRock19" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 100.462, 261.177 )
+
+[node name="SmallRock20" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 243.912, 380.878 )
+
+[node name="SmallRock21" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 387.363, 284.927 )
+
+[node name="SmallRock22" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 387.363, 95.8767 )
+
+[node name="SmallRock23" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 529.863, -58.9738 )
+
+[node name="SmallRock24" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 523.213, -234.724 )
+
+[node name="SmallRock25" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 464.313, -341.125 )
+
+[node name="SmallRock26" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 462.413, -507.375 )
+
+[node name="SmallRock27" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 389.263, -602.376 )
+
+[node name="SmallRock28" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 274.312, -698.326 )
+
+[node name="SmallRock29" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 155.562, -715.426 )
+
+[node name="SmallRock30" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -250.089, -704.976 )
+
+[node name="SmallRock31" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -517.04, -562.475 )
+
+[node name="SmallRock32" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -655.068, -358.465 )
+
+[node name="SmallRock33" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -754.418, -138.338 )
+
+[node name="SmallRock34" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -719.353, 89.581 )
+
+[node name="SmallRock35" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -544.031, 381.785 )
+
+[node name="SmallRock36" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -388.189, 336.98 )
+
+[node name="SmallRock37" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -148.582, 502.562 )
+
+[node name="SmallRock38" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -27.8044, 379.837 )
+
+[node name="SmallRock39" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 509.85, 218.151 )
+
+[node name="SmallRock40" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 398.813, -113.014 )
+
+[node name="SmallRock41" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 71.5449, -381.841 )
+
+[node name="SmallRock42" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -337.54, 537.627 )
+
+[node name="SmallRock43" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 116.349, 514.25 )
+
+[node name="SmallRock44" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 412.449, 430.485 )
+
+[node name="SmallRock45" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 595.564, 107.113 )
+
+[node name="SmallRock46" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 657.9, -146.13 )
+
+[node name="SmallRock47" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 706.601, -405.217 )
+
+[node name="SmallRock48" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 609.2, -514.307 )
+
+[node name="SmallRock49" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 22.8445, -822.094 )
+
+[node name="SmallRock50" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -789.482, 216.203 )
+
+[node name="SmallRock51" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -865.455, 190.878 )
+
+[node name="SmallRock52" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -788.764, -138.235 )
+
+[node name="SmallRock53" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -522.602, -303.92 )
+
+[node name="SmallRock54" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 209.855, 422.693 )
+
+[node name="SmallRock55" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 447.514, 557.107 )
+
+[node name="SmallRock56" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 500.111, 566.847 )
+
+[node name="SmallRock57" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 552.707, 531.783 )
+
+[node name="SmallRock58" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 593.616, 596.068 )
+
+[node name="SmallRock59" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 568.292, 245.423 )
+
+[node name="SmallRock60" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 685.173, -13.6643 )
+
+[node name="SmallRock61" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 696.861, 54.5165 )
+
+[node name="SmallRock62" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 768.938, -0.0281677 )
+
+[node name="SmallRock63" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 658.208, -213.286 )
+
+[node name="SmallRock64" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 760.736, -393.734 )
+
+[node name="SmallRock65" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 744.332, -350.673 )
+
+[node name="SmallRock66" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 816.101, -305.561 )
+
+[node name="SmallRock67" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 871.466, 200.926 )
+
+[node name="SmallRock68" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( 674.613, 358.818 )
+
+[node name="SmallRock69" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -520.859, 440.841 )
+
+[node name="SmallRock70" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -606.982, 430.588 )
+
+[node name="SmallRock71" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -650.044, 461.346 )
+
+[node name="SmallRock72" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -865.352, 282.948 )
+
+[node name="SmallRock73" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -643.892, 289.1 )
+
+[node name="SmallRock74" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -916.615, 6.1235 )
+
+[node name="SmallRock75" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -809.987, -262.499 )
+
+[node name="SmallRock76" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -541.365, -401.936 )
+
+[node name="SmallRock77" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -574.173, -346.572 )
+
+[node name="SmallRock78" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -596.729, -289.156 )
+
+[node name="SmallRock79" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -319.905, -604.941 )
+
+[node name="SmallRock80" parent="Static" instance=ExtResource( 17 )]
+position = Vector2( -18.4738, 594.632 )
+
+[node name="Tree2" parent="Static" instance=ExtResource( 18 )]
+position = Vector2( 227.817, 98.7789 )
+
+[node name="Enemies" type="YSort" parent="."]
 z_index = 1
 
 [node name="WolfEnemy" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -161.695, -141.541 )
+position = Vector2( 550.66, 49.2428 )
 
-[node name="Bushes" type="Node2D" parent="."]
+[node name="WolfEnemy3" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( 318.504, 443.407 )
+
+[node name="WolfEnemy4" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( 57.9547, 410.003 )
+
+[node name="WolfEnemy5" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -244.349, 421.695 )
+
+[node name="WolfEnemy6" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -725.363, 338.185 )
+
+[node name="WolfEnemy7" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -419.719, 136.093 )
+
+[node name="WolfEnemy8" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -900.733, -84.3722 )
+
+[node name="WolfEnemy9" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -623.482, -406.718 )
+
+[node name="WolfEnemy10" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -235.998, -493.568 )
+
+[node name="WolfEnemy16" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -540.457, -627.621 )
+
+[node name="WolfEnemy17" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -220.094, -766.218 )
+
+[node name="WolfEnemy18" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( 38.9233, -732.137 )
+
+[node name="WolfEnemy11" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( 376.961, -416.74 )
+
+[node name="WolfEnemy12" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( 345.227, -92.7231 )
+
+[node name="WolfEnemy13" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( 852.964, -136.148 )
+
+[node name="WolfEnemy14" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( 771.125, 274.718 )
+
+[node name="WolfEnemy15" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( 629.159, 503.534 )
+
+[node name="WolfEnemy2" parent="Enemies" instance=ExtResource( 8 )]
+position = Vector2( -624.474, -13.2892 )
+
+[node name="Interactables" type="YSort" parent="."]
 z_index = 1
 
-[node name="FoodBush" parent="Bushes" instance=ExtResource( 9 )]
+[node name="FoodBush" parent="Interactables" instance=ExtResource( 9 )]
 position = Vector2( -340, 200 )
 
-[node name="FoodBush2" parent="Bushes" instance=ExtResource( 9 )]
+[node name="FoodBush2" parent="Interactables" instance=ExtResource( 9 )]
 position = Vector2( -100, 120 )
 
-[node name="FoodBush3" parent="Bushes" instance=ExtResource( 9 )]
+[node name="FoodBush3" parent="Interactables" instance=ExtResource( 9 )]
 position = Vector2( 100, 130 )
+
+[node name="FoodBush4" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( 829.872, -70.4225 )
+
+[node name="FoodBush5" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( 631.12, -342.663 )
+
+[node name="FoodBush6" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( -26.9343, -643.297 )
+
+[node name="FoodBush7" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( -409.407, -509.682 )
+
+[node name="FoodBush8" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( -997.313, -170.634 )
+
+[node name="FoodBush9" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( -573.086, 469.048 )
+
+[node name="FoodBush10" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( -85.3908, 589.302 )
+
+[node name="FoodBush11" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( 562.642, 205.158 )
+
+[node name="FoodBush12" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( 952.247, 410.214 )
+
+[node name="FoodBush13" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( 504.39, 699.068 )
+
+[node name="FoodBush14" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( -1051.18, 267.111 )
+
+[node name="FoodBush15" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( -817.981, -604.753 )
+
+[node name="FoodBush16" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( -301.223, -859.157 )
+
+[node name="FoodBush17" parent="Interactables" instance=ExtResource( 9 )]
+position = Vector2( 422.239, -806.156 )
+
+[node name="Obelisk" parent="Interactables" instance=ExtResource( 16 )]
+position = Vector2( -193.223, 120.395 )
+
+[node name="Obelisk2" parent="Interactables" instance=ExtResource( 16 )]
+position = Vector2( -431.418, 386.756 )
+
+[node name="Obelisk3" parent="Interactables" instance=ExtResource( 16 )]
+position = Vector2( 741.497, 368.301 )
+
+[node name="Obelisk4" parent="Interactables" instance=ExtResource( 16 )]
+position = Vector2( 735.346, -156.64 )
+
+[node name="Obelisk5" parent="Interactables" instance=ExtResource( 16 )]
+position = Vector2( 181.697, -808.716 )
+
+[node name="Obelisk6" parent="Interactables" instance=ExtResource( 16 )]
+position = Vector2( -734.9, -525.74 )
+
+[node name="Obelisk7" parent="Interactables" instance=ExtResource( 16 )]
+position = Vector2( -1036.33, 124.285 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 z_index = 1
@@ -48,58 +539,96 @@ z_index = 1
 [node name="Camera" type="Camera2D" parent="."]
 current = true
 limit_smoothed = true
-smoothing_enabled = true
-smoothing_speed = 8.0
+smoothing_speed = 12.0
 script = ExtResource( 1 )
 trackedObject = NodePath("../Player")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
-[node name="Panel" type="Panel" parent="GUI"]
-modulate = Color( 0.411765, 0.411765, 0.411765, 0.784314 )
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 174.0
-margin_bottom = 26.0
+[node name="Control" type="Control" parent="GUI"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HPBar" type="TextureProgress" parent="GUI"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 304.0
-margin_bottom = 20.0
-rect_scale = Vector2( 0.5, 0.5 )
+[node name="Panel" type="Panel" parent="GUI/Control"]
+modulate = Color( 0.411765, 0.411765, 0.411765, 0.392157 )
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 266.0
+margin_bottom = 54.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HPBar" type="TextureProgress" parent="GUI/Control"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 262.0
+margin_bottom = 28.0
 step = 0.1
 value = 100.0
 texture_under = ExtResource( 5 )
-texture_progress = ExtResource( 3 )
+texture_progress = ExtResource( 15 )
 script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tween" type="Tween" parent="GUI/HPBar"]
+[node name="Tween" type="Tween" parent="GUI/Control/HPBar"]
 
-[node name="FoodBar" type="TextureProgress" parent="GUI"]
-margin_left = 4.0
-margin_top = 16.0
-margin_right = 304.0
-margin_bottom = 32.0
-rect_scale = Vector2( 0.5, 0.5 )
+[node name="HPText" type="RichTextLabel" parent="GUI/Control/HPBar"]
+margin_left = 107.0
+margin_top = 1.0
+margin_right = 167.0
+margin_bottom = 13.0
+custom_fonts/normal_font = SubResource( 5 )
+bbcode_enabled = true
+bbcode_text = "[center]100 / 100[/center]"
+text = "100 / 100"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FoodBar" type="TextureProgress" parent="GUI/Control"]
+margin_left = 12.0
+margin_top = 32.0
+margin_right = 124.0
+margin_bottom = 48.0
 step = 0.1
 value = 100.0
-texture_under = ExtResource( 5 )
-texture_progress = ExtResource( 4 )
+texture_under = ExtResource( 4 )
+texture_progress = ExtResource( 3 )
 script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tween" type="Tween" parent="GUI/FoodBar"]
+[node name="Tween" type="Tween" parent="GUI/Control/FoodBar"]
 
-[node name="Death" type="Control" parent="GUI"]
+[node name="MysticPoints" type="Sprite" parent="GUI/Control"]
+position = Vector2( 220, 40 )
+texture = ExtResource( 19 )
+
+[node name="MysticPointsCount" type="RichTextLabel" parent="GUI/Control"]
+margin_left = 225.0
+margin_top = 26.0
+margin_right = 265.0
+margin_bottom = 58.0
+custom_fonts/normal_font = SubResource( 3 )
+bbcode_enabled = true
+bbcode_text = "[right]0[/right]"
+text = "0"
+scroll_active = false
+script = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Death" type="Control" parent="GUI/Control"]
 modulate = Color( 1, 1, 1, 0 )
 margin_right = 40.0
 margin_bottom = 40.0
@@ -107,11 +636,11 @@ script = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-playerNode = NodePath("../../Player")
+playerNode = NodePath("../../../Player")
 
-[node name="Tween" type="Tween" parent="GUI/Death"]
+[node name="Tween" type="Tween" parent="GUI/Control/Death"]
 
-[node name="DeathBg1" type="Panel" parent="GUI/Death"]
+[node name="DeathBg1" type="Panel" parent="GUI/Control/Death"]
 modulate = Color( 1, 1, 1, 0.784314 )
 margin_top = 116.0
 margin_right = 640.0
@@ -120,7 +649,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DeathBg2" type="Panel" parent="GUI/Death"]
+[node name="DeathBg2" type="Panel" parent="GUI/Control/Death"]
 modulate = Color( 1, 1, 1, 0.631373 )
 margin_right = 640.0
 margin_bottom = 360.0
@@ -128,7 +657,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DeathText" type="RichTextLabel" parent="GUI/Death"]
+[node name="DeathText" type="RichTextLabel" parent="GUI/Control/Death"]
 margin_top = 110.0
 margin_right = 640.0
 margin_bottom = 238.0
@@ -137,16 +666,26 @@ bbcode_enabled = true
 bbcode_text = "[center]You died[/center]"
 text = "You died"
 
-[node name="ForegroundShadow" type="Sprite" parent="GUI"]
+[node name="ForegroundShadow" type="Sprite" parent="GUI/Control"]
 modulate = Color( 1, 1, 1, 0.235294 )
 position = Vector2( 320, 180 )
 texture = ExtResource( 13 )
 
+[node name="UpgradeUI" parent="GUI/Control" instance=ExtResource( 14 )]
+visible = false
+margin_left = 320.0
+margin_top = 180.0
+margin_right = 320.0
+margin_bottom = 180.0
+player = NodePath("../../../Player")
+
 [node name="Background" type="Sprite" parent="."]
-z_index = -10
+modulate = Color( 0.85098, 0.85098, 0.85098, 1 )
+z_index = -100
 texture = ExtResource( 10 )
 region_enabled = true
-region_rect = Rect2( 0, 0, 1000, 1000 )
-[connection signal="food_change" from="Player" to="GUI/FoodBar" method="_on_Player_food_change"]
-[connection signal="hp_change" from="Player" to="GUI/Death" method="_on_Player_hp_change"]
-[connection signal="hp_change" from="Player" to="GUI/HPBar" method="_on_Player_hp_change"]
+region_rect = Rect2( 0, 0, 3000, 3000 )
+[connection signal="food_change" from="Player" to="GUI/Control/FoodBar" method="_on_Player_food_change"]
+[connection signal="hp_change" from="Player" to="GUI/Control/HPBar" method="_on_Player_hp_change"]
+[connection signal="hp_change" from="Player" to="GUI/Control/Death" method="_on_Player_hp_change"]
+[connection signal="mystical_change" from="Player" to="GUI/Control/MysticPointsCount" method="_on_Player_mystical_change"]

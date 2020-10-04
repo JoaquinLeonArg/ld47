@@ -1,0 +1,103 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Scripts/Upgrade.gd" type="Script" id=1]
+[ext_resource path="res://Images/upgrade.png" type="Texture" id=2]
+[ext_resource path="res://Fonts/CyborgSister.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Images/upgrade_disabled.png" type="Texture" id=4]
+[ext_resource path="res://Images/upgrade_clicked.png" type="Texture" id=5]
+[ext_resource path="res://Images/money.png" type="Texture" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 3 )
+
+[node name="Upgrade" type="TextureButton"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -540.0
+margin_bottom = -296.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 5 )
+texture_disabled = ExtResource( 4 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="RichTextLabel" parent="."]
+margin_left = 2.0
+margin_right = 86.0
+margin_bottom = 14.0
+mouse_filter = 2
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "Test"
+text = "Test"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DescriptionShadow" type="RichTextLabel" parent="."]
+margin_left = 5.0
+margin_top = 25.0
+margin_right = 97.0
+margin_bottom = 63.0
+mouse_filter = 2
+custom_fonts/normal_font = SubResource( 2 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = true
+bbcode_text = "Some other text"
+text = "Some other text"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Description" type="RichTextLabel" parent="."]
+margin_left = 4.0
+margin_top = 24.0
+margin_right = 96.0
+margin_bottom = 62.0
+mouse_filter = 2
+custom_fonts/normal_font = SubResource( 2 )
+bbcode_enabled = true
+bbcode_text = "Some other text"
+text = "Some other text"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color( 0, 0, 0, 0.529412 )
+margin_left = 85.0
+margin_top = 2.0
+margin_right = 96.0
+margin_bottom = 24.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 90, 7 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 6 )
+
+[node name="Cost" type="RichTextLabel" parent="."]
+margin_left = 81.0
+margin_top = 10.0
+margin_right = 101.0
+margin_bottom = 26.0
+mouse_filter = 2
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center] 0 [/center]"
+text = " 0 "
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="." to="." method="_on_Upgrade_pressed"]

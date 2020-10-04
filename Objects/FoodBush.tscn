@@ -2,13 +2,15 @@
 
 [ext_resource path="res://Images/bush.png" type="Texture" id=1]
 [ext_resource path="res://Images/berries.png" type="Texture" id=2]
-[ext_resource path="res://Objects/FoodBush.gd" type="Script" id=4]
+[ext_resource path="res://Scripts/FoodBush.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 8.0
+height = 26.0
 
 [node name="FoodBush" type="Node2D"]
-script = ExtResource( 4 )
+script = ExtResource( 3 )
+replenishTime = 5000
 
 [node name="BushSprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )

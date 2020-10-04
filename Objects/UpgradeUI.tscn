@@ -1,0 +1,188 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Fonts/CyborgSister.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Objects/Upgrade.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scripts/UpgradeUI.gd" type="Script" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_char = 1
+font_data = ExtResource( 1 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Upgrade
+
+func upgrade(player: Player):
+	.upgrade(player)
+	player.moveSpeed *= 1.1
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Upgrade
+
+func upgrade(player: Player):
+	.upgrade(player)
+	player.maxHp = 200
+	player.take_damage(-200)
+"
+
+[node name="UpgradeUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -319.557
+margin_top = -153.749
+margin_right = -319.557
+margin_bottom = -153.749
+mouse_filter = 2
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -116.0
+margin_top = -126.0
+margin_right = 124.0
+margin_bottom = 134.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -120.0
+margin_top = -130.0
+margin_right = 120.0
+margin_bottom = 130.0
+mouse_filter = 2
+color = Color( 0.843137, 0.843137, 0.843137, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleShadow" type="RichTextLabel" parent="ColorRect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -99.0
+margin_top = -129.0
+margin_right = 101.0
+margin_bottom = -89.0
+custom_fonts/normal_font = SubResource( 1 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Upgrades[/center]"
+text = "Upgrades"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="RichTextLabel" parent="ColorRect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -100.0
+margin_top = -130.0
+margin_right = 100.0
+margin_bottom = -90.0
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Upgrades[/center]"
+text = "Upgrades"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Swiftness" parent="ColorRect" instance=ExtResource( 2 )]
+margin_left = 8.0
+margin_top = 35.0
+margin_right = -132.0
+margin_bottom = -161.0
+script = SubResource( 2 )
+title = "Swiftness"
+description = "Increased movement speed."
+cost = 6
+unlocks = [ NodePath("../EscapePlan") ]
+
+[node name="HardenedSkin" parent="ColorRect" instance=ExtResource( 2 )]
+margin_left = 132.0
+margin_top = 35.0
+margin_right = -8.0
+margin_bottom = -161.0
+script = SubResource( 3 )
+title = "Hardened Skin"
+description = "Increased hitpoints."
+cost = 6
+unlocks = [ NodePath("../Harvester") ]
+
+[node name="EscapePlan" parent="ColorRect" instance=ExtResource( 2 )]
+margin_left = 8.0
+margin_top = 110.0
+margin_right = -132.0
+margin_bottom = -86.0
+disabled = true
+title = "Escape Plan"
+description = "Faster burrowing."
+cost = 9
+unlocks = [ NodePath("../BreakTheLoop") ]
+
+[node name="Harvester" parent="ColorRect" instance=ExtResource( 2 )]
+margin_left = 132.0
+margin_top = 110.0
+margin_right = -8.0
+margin_bottom = -86.0
+disabled = true
+title = "Harvester"
+description = "Increased food gain."
+cost = 9
+unlocks = [ NodePath("../BreakTheLoop") ]
+
+[node name="BreakTheLoop" parent="ColorRect" instance=ExtResource( 2 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -50.0
+margin_top = 55.0
+margin_right = 50.0
+margin_bottom = 119.0
+disabled = true
+title = "Break the Loop"
+description = "???"
+cost = 18
+
+[node name="Line2D" type="Line2D" parent="ColorRect"]
+position = Vector2( -200, -50 )
+points = PoolVector2Array( 258, 149, 258, 160 )
+width = 4.0
+default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
+
+[node name="Line2D2" type="Line2D" parent="ColorRect"]
+position = Vector2( -200, -50 )
+points = PoolVector2Array( 382, 149, 382, 160 )
+width = 4.0
+default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
+
+[node name="Line2D3" type="Line2D" parent="ColorRect"]
+position = Vector2( -200, -50 )
+points = PoolVector2Array( 382, 224, 382, 230, 320, 230, 320, 235 )
+width = 4.0
+default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
+
+[node name="Line2D4" type="Line2D" parent="ColorRect"]
+position = Vector2( -200, -50 )
+points = PoolVector2Array( 258, 224, 258, 230, 320, 230, 320, 235 )
+width = 4.0
+default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
