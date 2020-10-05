@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Drake_Stafford_-_Warm_Ups.ogg-327a0bda3e700642f256861fcca56491.oggstr"
+
+[deps]
+
+source_file="res://Music/Drake_Stafford_-_Warm_Ups.ogg"
+dest_files=[ "res://.import/Drake_Stafford_-_Warm_Ups.ogg-327a0bda3e700642f256861fcca56491.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

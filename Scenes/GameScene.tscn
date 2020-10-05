@@ -1,9 +1,9 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://Scripts/GameCamera.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Images/bar_green_smalll.png" type="Texture" id=3]
-[ext_resource path="res://Images/bar_bg_small.png" type="Texture" id=4]
+[ext_resource path="res://Images/bar_green.png" type="Texture" id=3]
+[ext_resource path="res://Images/food_icon.png" type="Texture" id=4]
 [ext_resource path="res://Images/bar_bg.png" type="Texture" id=5]
 [ext_resource path="res://Scripts/FoodBar.gd" type="Script" id=6]
 [ext_resource path="res://Scripts/HPBar.gd" type="Script" id=7]
@@ -26,6 +26,12 @@
 [ext_resource path="res://Objects/GoldenCarrot.tscn" type="PackedScene" id=24]
 [ext_resource path="res://Images/shadow.png" type="Texture" id=25]
 [ext_resource path="res://Objects/Tutorial.tscn" type="PackedScene" id=26]
+[ext_resource path="res://Images/hp_icon.png" type="Texture" id=27]
+[ext_resource path="res://Objects/NowPlaying.tscn" type="PackedScene" id=28]
+[ext_resource path="res://Music/Mid-Air_Machine_-_Roar_of_the_Wild.ogg" type="AudioStream" id=29]
+[ext_resource path="res://Music/Dee_Yan-Key_-_06_-_The_Game.ogg" type="AudioStream" id=30]
+[ext_resource path="res://Music/Mid-Air_Machine_-_Breathing_Out.ogg" type="AudioStream" id=31]
+[ext_resource path="res://Music/Mid-Air_Machine_-_At_Least_It_Is.ogg" type="AudioStream" id=33]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -39,7 +45,10 @@ var grassThing = preload(\"res://Objects/GrassThing.tscn\")
 var foxScene = preload(\"res://Objects/WolfEnemy.tscn\")
 var cobraScene = preload(\"res://Objects/CobraEnemy.tscn\")
 var spikesScene = preload(\"res://Objects/SpikesEnemy.tscn\")
-	
+
+onready var nowPlaying = get_node(\"GUI/NowPlaying\")
+onready var music = get_node(\"Music\")
+
 export(int) var density = 80
 
 func _ready():
@@ -48,6 +57,13 @@ func _ready():
 	gen_objects()
 	gen_frontier()
 	gen_enemies()
+	play_music()
+
+func play_music():
+	var tracknum = randi() % self.music.get_child_count()
+	self.music.get_child(tracknum).play()
+	var nodeName = self.music.get_child(tracknum).name.split(\"!\")
+	self.nowPlaying.play(nodeName[0], nodeName[1])
 
 func gen_objects():
 	var x = 0
@@ -93,14 +109,15 @@ func gen_frontier():
 	var c = 0
 	while c < 4:
 		var angle = 0
-		while angle < 365:
-			angle += 1 + randf() / 8
-			var pos = Vector2((1500 + 50 * c)*sin(angle), (1000 + 50 * c)*cos(angle))
+		while angle < 368:
+			angle += 1
+			var pos = Vector2((1500 + 30 * c + randf())*sin(angle), (1000 + 30 * c + randf())*cos(angle))
 			var object = null
-			if randf() < 0.8:
+			if randf() < .65:
 				object = smallRockScene.instance()
 			else:
 				object = bigRockScene.instance()
+				angle += .5
 			object.position = pos
 			self.get_node(\"Objects\").add_child(object)
 		c += 1
@@ -111,32 +128,32 @@ func gen_enemies():
 		var fox = self.foxScene.instance()
 		fox.position = Vector2(700*sin(angle), 500*cos(angle))
 		self.get_node(\"Objects\").add_child(fox)
-		angle += 36
+		angle += 18
 		
 		var cobra = self.cobraScene.instance()
-		cobra.position = Vector2(1100*sin(angle), 800*cos(angle))
+		cobra.position = Vector2(1300*sin(angle), 900*cos(angle))
 		self.get_node(\"Objects\").add_child(cobra)
-		angle += 20
+		angle += 15
 "
 
 [sub_resource type="CapsuleShape2D" id=2]
 radius = 7.0
 height = 28.0
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=3]
 script/source = "extends Control
 
 func _ready():
 	self.visible = true
 "
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=4]
 size = 32
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 11 )
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=5]
 script/source = "extends RichTextLabel
 
 
@@ -145,24 +162,24 @@ func _on_Player_mystical_change(points):
 	self.bbcode_text = \"[right]\" + String(points) + \"[/right]\"
 "
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=6]
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 11 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=7]
 size = 96
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 11 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=8]
 size = 32
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 11 )
 
-[sub_resource type="GDScript" id=3]
+[sub_resource type="GDScript" id=9]
 script/source = "extends ColorRect
 
 onready var tween = get_node(\"Tween\")
@@ -173,6 +190,7 @@ func fadeout():
 	self.tween.start()
 
 func _ready():
+	self.visible = true
 	self.tween.interpolate_property(self, \"modulate:a\",
 		1, 0, 2, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
 	self.tween.start()
@@ -247,10 +265,9 @@ trackedObject = NodePath("../Objects/Player")
 [node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="GUI"]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
-script = SubResource( 4 )
+script = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -261,7 +278,6 @@ margin_bottom = 180.0
 uiBars = NodePath("../Bars")
 
 [node name="Bars" type="Control" parent="GUI/Control"]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
@@ -270,38 +286,36 @@ __meta__ = {
 
 [node name="Panel" type="Panel" parent="GUI/Control/Bars"]
 modulate = Color( 0.411765, 0.411765, 0.411765, 0.392157 )
-margin_left = 6.0
-margin_top = 6.0
-margin_right = 266.0
-margin_bottom = 54.0
+margin_right = 640.0
+margin_bottom = 24.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="MysticPoints" type="Sprite" parent="GUI/Control/Bars"]
-position = Vector2( 220, 40 )
+position = Vector2( 520, 12 )
 texture = ExtResource( 19 )
 
 [node name="MysticPointsCount" type="RichTextLabel" parent="GUI/Control/Bars"]
-margin_left = 225.0
-margin_top = 26.0
-margin_right = 265.0
-margin_bottom = 58.0
-custom_fonts/normal_font = SubResource( 5 )
+margin_left = 530.0
+margin_top = -4.0
+margin_right = 570.0
+margin_bottom = 28.0
+custom_fonts/normal_font = SubResource( 4 )
 bbcode_enabled = true
 bbcode_text = "[right]0[/right]"
 text = "0"
 scroll_active = false
-script = SubResource( 6 )
+script = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HPBar" type="TextureProgress" parent="GUI/Control/Bars"]
-margin_left = 12.0
-margin_top = 12.0
-margin_right = 262.0
-margin_bottom = 28.0
+margin_left = 70.0
+margin_top = 4.0
+margin_right = 270.0
+margin_bottom = 20.0
 step = 0.1
 value = 100.0
 texture_under = ExtResource( 5 )
@@ -314,11 +328,15 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="GUI/Control/Bars/HPBar"]
 
 [node name="HPText" type="RichTextLabel" parent="GUI/Control/Bars/HPBar"]
-margin_left = 107.0
-margin_top = 1.0
-margin_right = 167.0
-margin_bottom = 13.0
-custom_fonts/normal_font = SubResource( 7 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -30.0
+margin_top = -8.0
+margin_right = 30.0
+margin_bottom = 4.0
+custom_fonts/normal_font = SubResource( 6 )
 bbcode_enabled = true
 bbcode_text = "[center]100 / 100[/center]"
 text = "100 / 100"
@@ -327,14 +345,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Sprite" type="Sprite" parent="GUI/Control/Bars/HPBar"]
+position = Vector2( 0, 8 )
+texture = ExtResource( 27 )
+
 [node name="FoodBar" type="TextureProgress" parent="GUI/Control/Bars"]
-margin_left = 12.0
-margin_top = 32.0
-margin_right = 124.0
-margin_bottom = 48.0
+margin_left = 290.0
+margin_top = 4.0
+margin_right = 490.0
+margin_bottom = 20.0
 step = 0.1
 value = 100.0
-texture_under = ExtResource( 4 )
+texture_under = ExtResource( 5 )
 texture_progress = ExtResource( 3 )
 script = ExtResource( 6 )
 __meta__ = {
@@ -342,6 +364,28 @@ __meta__ = {
 }
 
 [node name="Tween" type="Tween" parent="GUI/Control/Bars/FoodBar"]
+
+[node name="FoodText" type="RichTextLabel" parent="GUI/Control/Bars/FoodBar"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -30.0
+margin_top = -8.0
+margin_right = 30.0
+margin_bottom = 4.0
+custom_fonts/normal_font = SubResource( 6 )
+bbcode_enabled = true
+bbcode_text = "[center]100%[/center]"
+text = "100%"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="GUI/Control/Bars/FoodBar"]
+position = Vector2( 0, 9 )
+texture = ExtResource( 4 )
 
 [node name="Death" type="Control" parent="GUI/Control"]
 modulate = Color( 1, 1, 1, 0 )
@@ -376,7 +420,7 @@ __meta__ = {
 margin_top = 125.0
 margin_right = 640.0
 margin_bottom = 253.0
-custom_fonts/normal_font = SubResource( 8 )
+custom_fonts/normal_font = SubResource( 7 )
 bbcode_enabled = true
 bbcode_text = "[center]You died[/center]"
 text = "You died"
@@ -385,7 +429,7 @@ text = "You died"
 margin_top = 260.0
 margin_right = 640.0
 margin_bottom = 388.0
-custom_fonts/normal_font = SubResource( 9 )
+custom_fonts/normal_font = SubResource( 8 )
 bbcode_enabled = true
 bbcode_text = "[center]Press [E] to continue
 with the next generation...[/center]"
@@ -408,16 +452,20 @@ margin_right = 320.0
 margin_bottom = 180.0
 
 [node name="FadeOut" type="ColorRect" parent="GUI"]
+visible = false
 margin_right = 640.0
 margin_bottom = 360.0
 mouse_filter = 2
 color = Color( 0, 0, 0, 1 )
-script = SubResource( 3 )
+script = SubResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Tween" type="Tween" parent="GUI/FadeOut"]
+
+[node name="NowPlaying" parent="GUI" instance=ExtResource( 28 )]
+position = Vector2( 704, 72 )
 
 [node name="Grass" type="Sprite" parent="."]
 modulate = Color( 0.85098, 0.85098, 0.85098, 1 )
@@ -473,7 +521,29 @@ position = Vector2( 3000, 0 )
 scale = Vector2( 8, 8 )
 z_index = 100
 texture = ExtResource( 25 )
+
+[node name="Music" type="Node" parent="."]
+
+[node name="The Game!Dee Yan-Key" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 30 )
+volume_db = -12.0
+
+[node name="At Least It Is!Mid-Air Machine" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 33 )
+volume_db = -12.0
+
+[node name="Breathing Out!Mid-Air Machine" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 31 )
+volume_db = -14.0
+
+[node name="Roar of the Wild!Mid-Air Machine" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 29 )
+volume_db = -22.0
 [connection signal="food_change" from="Objects/Player" to="GUI/Control/Bars/FoodBar" method="_on_Player_food_change"]
 [connection signal="hp_change" from="Objects/Player" to="GUI/Control/Death" method="_on_Player_hp_change"]
 [connection signal="hp_change" from="Objects/Player" to="GUI/Control/Bars/HPBar" method="_on_Player_hp_change"]
 [connection signal="mystical_change" from="Objects/Player" to="GUI/Control/Bars/MysticPointsCount" method="_on_Player_mystical_change"]
+[connection signal="finished" from="Music/The Game!Dee Yan-Key" to="." method="play_music"]
+[connection signal="finished" from="Music/At Least It Is!Mid-Air Machine" to="." method="play_music"]
+[connection signal="finished" from="Music/Breathing Out!Mid-Air Machine" to="." method="play_music"]
+[connection signal="finished" from="Music/Roar of the Wild!Mid-Air Machine" to="." method="play_music"]

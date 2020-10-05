@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Mid-Air_Machine_-_Roar_of_the_Wild.ogg-03c3ae903e8bbf18e10e4cfd3b56c744.oggstr"
+
+[deps]
+
+source_file="res://Music/Mid-Air_Machine_-_Roar_of_the_Wild.ogg"
+dest_files=[ "res://.import/Mid-Air_Machine_-_Roar_of_the_Wild.ogg-03c3ae903e8bbf18e10e4cfd3b56c744.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

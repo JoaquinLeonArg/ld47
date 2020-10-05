@@ -21,7 +21,7 @@ func _on_mouse_entered():
 
 func _on_mouse_exited():
 	self.tween.interpolate_property(self, "rect_position:x",
-		self.rect_position.x, -50, .5,
+		self.rect_position.x, -40, .5,
 		Tween.TRANS_QUAD, Tween.EASE_OUT)
 	self.tween.start()
 

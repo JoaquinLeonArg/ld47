@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Dee_Yan-Key_-_04_-_dreamworld.ogg-361ea794097a683c2e2125f0c3215d2c.oggstr"
+
+[deps]
+
+source_file="res://Music/Dee_Yan-Key_-_04_-_dreamworld.ogg"
+dest_files=[ "res://.import/Dee_Yan-Key_-_04_-_dreamworld.ogg-361ea794097a683c2e2125f0c3215d2c.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

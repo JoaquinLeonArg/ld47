@@ -76,10 +76,8 @@ margin_right = -200.0
 margin_bottom = -84.0
 custom_fonts/normal_font = SubResource( 5 )
 bbcode_enabled = true
-bbcode_text = "[center]Welcome to
-Rabbit Loop![/center]"
-text = "Welcome to
-Rabbit Loop!"
+bbcode_text = "[center]Movement[/center]"
+text = "Movement"
 scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -109,9 +107,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -572.0
-margin_top = -324.0
+margin_top = -348.0
 margin_right = -348.0
-margin_bottom = -196.0
+margin_bottom = -220.0
 custom_fonts/normal_font = SubResource( 7 )
 bbcode_enabled = true
 bbcode_text = "[center]Move rabbit
@@ -126,7 +124,7 @@ __meta__ = {
 }
 
 [node name="WASD" type="Sprite" parent="Frame1"]
-position = Vector2( 120, 16 )
+position = Vector2( 120, -8 )
 texture = ExtResource( 3 )
 
 [node name="Frame2" type="Sprite" parent="."]
@@ -281,8 +279,8 @@ margin_right = -200.0
 margin_bottom = -84.0
 custom_fonts/normal_font = SubResource( 5 )
 bbcode_enabled = true
-bbcode_text = "[center]Life and food[/center]"
-text = "Life and food"
+bbcode_text = "[center]Death[/center]"
+text = "Death"
 scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false

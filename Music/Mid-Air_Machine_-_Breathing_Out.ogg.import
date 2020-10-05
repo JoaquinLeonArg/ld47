@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Mid-Air_Machine_-_Breathing_Out.ogg-ba8dcfa44435be10323112686ca30701.oggstr"
+
+[deps]
+
+source_file="res://Music/Mid-Air_Machine_-_Breathing_Out.ogg"
+dest_files=[ "res://.import/Mid-Air_Machine_-_Breathing_Out.ogg-ba8dcfa44435be10323112686ca30701.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

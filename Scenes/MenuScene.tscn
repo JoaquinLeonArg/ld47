@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Objects/MenuButton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Images/mountains.png" type="Texture" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://Shaders/MountainsShader.tres" type="Material" id=5]
 [ext_resource path="res://Images/gamelogo.png" type="Texture" id=6]
 [ext_resource path="res://Fonts/CyborgSister.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://Objects/NowPlaying.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Music/Dee_Yan-Key_-_04_-_dreamworld.ogg" type="AudioStream" id=9]
 
 [sub_resource type="Shader" id=9]
 code = "shader_type canvas_item;
@@ -28,12 +30,15 @@ script/source = "extends MainMenuButton
 onready var fadeOut = get_tree().current_scene.get_node(\"FadeOut\")
 onready var fadeOutTween = fadeOut.get_node(\"Tween\")
 onready var timer = get_node(\"Timer\")
+onready var music = get_tree().current_scene.get_node(\"MenuMusic\")
 
 func _on_pressed():
 	._on_pressed()
 	self.tween.interpolate_property(self.fadeOut, \"modulate:a\",
 		0, 1, 2,
 		Tween.TRANS_QUAD, Tween.EASE_OUT)
+	self.tween.interpolate_property(self.music, \"volume_db\",
+		self.music.volume_db, -80, 1, Tween.TRANS_QUAD, Tween.EASE_IN)
 	self.tween.start()
 	for button in get_tree().current_scene.get_node(\"Buttons\").get_children():
 		button.disabled = true
@@ -45,6 +50,10 @@ func _on_Timer_timeout():
 
 [sub_resource type="GDScript" id=12]
 script/source = "extends MainMenuButton
+
+func _on_pressed():
+	._on_pressed()
+	OS.window_fullscreen = !OS.window_fullscreen
 "
 
 [sub_resource type="GDScript" id=13]
@@ -73,10 +82,14 @@ func _process(delta):
 script/source = "extends ColorRect
 
 onready var tween = get_node(\"Tween\")
+onready var music = get_tree().current_scene.get_node(\"MenuMusic\")
 
 func _ready():
+	self.visible = true
 	self.tween.interpolate_property(self, \"modulate:a\",
 		1, 0, 1, Tween.TRANS_QUAD, Tween.EASE_IN)
+	self.tween.interpolate_property(self.music, \"volume_db\",
+		-80, -18, 1, Tween.TRANS_QUAD, Tween.EASE_IN)
 	self.tween.start()
 "
 
@@ -125,9 +138,9 @@ __meta__ = {
 }
 
 [node name="StartGame" parent="Buttons" instance=ExtResource( 1 )]
-margin_left = -70.0
+margin_left = -60.0
 margin_top = 200.0
-margin_right = 330.0
+margin_right = 340.0
 margin_bottom = 264.0
 script = SubResource( 11 )
 buttonName = "Start game"
@@ -135,19 +148,18 @@ buttonName = "Start game"
 [node name="Timer" type="Timer" parent="Buttons/StartGame"]
 one_shot = true
 
-[node name="Options" parent="Buttons" instance=ExtResource( 1 )]
-margin_left = -70.0
+[node name="FullScreen" parent="Buttons" instance=ExtResource( 1 )]
+margin_left = -60.0
 margin_top = 240.0
-margin_right = 330.0
+margin_right = 340.0
 margin_bottom = 304.0
-disabled = true
 script = SubResource( 12 )
-buttonName = "Options"
+buttonName = "Toggle Fullscreen"
 
 [node name="Exit" parent="Buttons" instance=ExtResource( 1 )]
-margin_left = -70.0
+margin_left = -60.0
 margin_top = 280.0
-margin_right = 330.0
+margin_right = 340.0
 margin_bottom = 344.0
 script = SubResource( 13 )
 buttonName = "Exit"
@@ -184,6 +196,7 @@ texture = ExtResource( 6 )
 script = SubResource( 6 )
 
 [node name="FadeOut" type="ColorRect" parent="."]
+visible = false
 modulate = Color( 0, 0, 0, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -194,4 +207,11 @@ __meta__ = {
 }
 
 [node name="Tween" type="Tween" parent="FadeOut"]
+
+[node name="NowPlaying" parent="." instance=ExtResource( 8 )]
+position = Vector2( 704, 72 )
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+volume_db = -18.0
 [connection signal="timeout" from="Buttons/StartGame/Timer" to="Buttons/StartGame" method="_on_Timer_timeout"]

@@ -1,9 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Objects/Shadow.tscn" type="PackedScene" id=1]
-
-[sub_resource type="StreamTexture" id=2]
-load_path = "res://.import/grass-things.png-42ec833c83a1ac69773473041b239ea6.stex"
+[ext_resource path="res://Images/grass_things.png" type="Texture" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
@@ -15,7 +13,7 @@ func _ready():
 "
 
 [node name="GrassThing" type="Sprite"]
-texture = SubResource( 2 )
+texture = ExtResource( 2 )
 hframes = 6
 script = SubResource( 1 )
 
