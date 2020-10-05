@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Obelisk.wav-3435e8dcf1b6c7c48f548514796f44a5.sample"
+
+[deps]
+
+source_file="res://Sound/Obelisk.wav"
+dest_files=[ "res://.import/Obelisk.wav-3435e8dcf1b6c7c48f548514796f44a5.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

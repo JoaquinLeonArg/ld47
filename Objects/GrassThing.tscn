@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Objects/Shadow.tscn" type="PackedScene" id=1]
+
+[sub_resource type="StreamTexture" id=2]
+load_path = "res://.import/grass-things.png-42ec833c83a1ac69773473041b239ea6.stex"
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+
+func _ready():
+	self.frame = randi() % 6
+	if self.frame > 2:
+		self.frame = randi() % 6
+"
+
+[node name="GrassThing" type="Sprite"]
+texture = SubResource( 2 )
+hframes = 6
+script = SubResource( 1 )
+
+[node name="Shadow" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0, 4 )
+scale = Vector2( 0.1, 0.1 )

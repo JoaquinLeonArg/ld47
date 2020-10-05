@@ -1,10 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Fonts/CyborgSister.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Objects/Upgrade.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scripts/UpgradeUI.gd" type="Script" id=3]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=7]
 size = 32
 outline_color = Color( 0, 0, 0, 1 )
 extra_spacing_char = 1
@@ -13,19 +13,53 @@ font_data = ExtResource( 1 )
 [sub_resource type="GDScript" id=2]
 script/source = "extends Upgrade
 
-func upgrade(player: Player):
-	.upgrade(player)
-	player.moveSpeed *= 1.1
+export(float) var moveSpeedMult = 1.1
+
+func concrete_upgrade(player):
+	player.moveSpeed *= self.moveSpeedMult
 "
 
 [sub_resource type="GDScript" id=3]
 script/source = "extends Upgrade
 
-func upgrade(player: Player):
-	.upgrade(player)
-	player.maxHp = 200
-	player.take_damage(-200)
+export(int) var extraHP = 100
+
+func concrete_upgrade(player: Player):
+	player.maxHp += self.extraHP
+	player.take_damage(-self.extraHP)
 "
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Upgrade
+
+export(float) var detectionRangeMult = 0.6
+
+func concrete_upgrade(player):
+	player.detectionRange = self.detectionRangeMult
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Upgrade
+
+export(int) var foodYieldExtra = 5
+
+func concrete_upgrade(player):
+	player.foodYieldExtra = self.foodYieldExtra
+"
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Upgrade
+
+func concrete_upgrade(player):
+	pass
+"
+
+[sub_resource type="DynamicFont" id=8]
+size = 32
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_char = 1
+font_data = ExtResource( 1 )
 
 [node name="UpgradeUI" type="Control"]
 anchor_right = 1.0
@@ -79,7 +113,7 @@ margin_left = -99.0
 margin_top = -129.0
 margin_right = 101.0
 margin_bottom = -89.0
-custom_fonts/normal_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 7 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
 bbcode_text = "[center]Upgrades[/center]"
@@ -97,7 +131,7 @@ margin_left = -100.0
 margin_top = -130.0
 margin_right = 100.0
 margin_bottom = -90.0
-custom_fonts/normal_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 7 )
 bbcode_enabled = true
 bbcode_text = "[center]Upgrades[/center]"
 text = "Upgrades"
@@ -113,8 +147,8 @@ margin_bottom = -161.0
 script = SubResource( 2 )
 title = "Swiftness"
 description = "Increased movement speed."
-cost = 6
-unlocks = [ NodePath("../EscapePlan") ]
+cost = 12
+unlocks = [ NodePath("../Stealth") ]
 
 [node name="HardenedSkin" parent="ColorRect" instance=ExtResource( 2 )]
 margin_left = 132.0
@@ -124,18 +158,19 @@ margin_bottom = -161.0
 script = SubResource( 3 )
 title = "Hardened Skin"
 description = "Increased hitpoints."
-cost = 6
+cost = 12
 unlocks = [ NodePath("../Harvester") ]
 
-[node name="EscapePlan" parent="ColorRect" instance=ExtResource( 2 )]
+[node name="Stealth" parent="ColorRect" instance=ExtResource( 2 )]
 margin_left = 8.0
 margin_top = 110.0
 margin_right = -132.0
 margin_bottom = -86.0
 disabled = true
-title = "Escape Plan"
-description = "Faster burrowing."
-cost = 9
+script = SubResource( 4 )
+title = "Stealth"
+description = "Decreased detection."
+cost = 20
 unlocks = [ NodePath("../BreakTheLoop") ]
 
 [node name="Harvester" parent="ColorRect" instance=ExtResource( 2 )]
@@ -144,9 +179,10 @@ margin_top = 110.0
 margin_right = -8.0
 margin_bottom = -86.0
 disabled = true
+script = SubResource( 5 )
 title = "Harvester"
-description = "Increased food gain."
-cost = 9
+description = "Increased food yields."
+cost = 20
 unlocks = [ NodePath("../BreakTheLoop") ]
 
 [node name="BreakTheLoop" parent="ColorRect" instance=ExtResource( 2 )]
@@ -159,9 +195,10 @@ margin_top = 55.0
 margin_right = 50.0
 margin_bottom = 119.0
 disabled = true
+script = SubResource( 6 )
 title = "Break the Loop"
 description = "???"
-cost = 18
+cost = 24
 
 [node name="Line2D" type="Line2D" parent="ColorRect"]
 position = Vector2( -200, -50 )
@@ -186,3 +223,21 @@ position = Vector2( -200, -50 )
 points = PoolVector2Array( 258, 224, 258, 230, 320, 230, 320, 235 )
 width = 4.0
 default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
+
+[node name="Exit" type="RichTextLabel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -99.0
+margin_top = 130.0
+margin_right = 101.0
+margin_bottom = 170.0
+custom_fonts/normal_font = SubResource( 8 )
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Press [E] to exit[/center]"
+text = "Press [E] to exit"
+__meta__ = {
+"_edit_use_anchors_": false
+}

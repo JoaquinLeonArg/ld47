@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scripts/Upgrade.gd" type="Script" id=1]
 [ext_resource path="res://Images/upgrade.png" type="Texture" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://Images/upgrade_disabled.png" type="Texture" id=4]
 [ext_resource path="res://Images/upgrade_clicked.png" type="Texture" id=5]
 [ext_resource path="res://Images/money.png" type="Texture" id=6]
+[ext_resource path="res://Sound/UpgradeFail.wav" type="AudioStream" id=7]
+[ext_resource path="res://Sound/Upgrade.wav" type="AudioStream" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 outline_size = 1
@@ -87,9 +89,9 @@ scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 6 )
 
 [node name="Cost" type="RichTextLabel" parent="."]
-margin_left = 81.0
+margin_left = 80.0
 margin_top = 10.0
-margin_right = 101.0
+margin_right = 102.0
 margin_bottom = 26.0
 mouse_filter = 2
 custom_fonts/normal_font = SubResource( 1 )
@@ -100,4 +102,12 @@ scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Fail" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = -12.0
+
+[node name="Success" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = -10.0
 [connection signal="pressed" from="." to="." method="_on_Upgrade_pressed"]

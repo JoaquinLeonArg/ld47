@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Scripts/GameCamera.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Player.tscn" type="PackedScene" id=2]
@@ -7,20 +7,123 @@
 [ext_resource path="res://Images/bar_bg.png" type="Texture" id=5]
 [ext_resource path="res://Scripts/FoodBar.gd" type="Script" id=6]
 [ext_resource path="res://Scripts/HPBar.gd" type="Script" id=7]
-[ext_resource path="res://Objects/WolfEnemy.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Objects/FoodBush.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Objects/BigRock.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Images/pillow_blue.png" type="Texture" id=9]
 [ext_resource path="res://Images/grass.png" type="Texture" id=10]
 [ext_resource path="res://Fonts/CyborgSister.ttf" type="DynamicFontData" id=11]
 [ext_resource path="res://Scripts/Death.gd" type="Script" id=12]
 [ext_resource path="res://Images/foreground-fx.png" type="Texture" id=13]
 [ext_resource path="res://Objects/UpgradeUI.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Images/bar_red.png" type="Texture" id=15]
-[ext_resource path="res://Objects/Obelisk.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Images/pot.png" type="Texture" id=16]
 [ext_resource path="res://Objects/SmallRock.tscn" type="PackedScene" id=17]
-[ext_resource path="res://Objects/Tree.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Objects/CobraEnemy.tscn" type="PackedScene" id=18]
 [ext_resource path="res://Images/money.png" type="Texture" id=19]
+[ext_resource path="res://Images/cave_dirt.png" type="Texture" id=20]
+[ext_resource path="res://Objects/LilRabbit.tscn" type="PackedScene" id=21]
+[ext_resource path="res://Objects/Teleporter.tscn" type="PackedScene" id=22]
+[ext_resource path="res://Images/main_tree.png" type="Texture" id=23]
+[ext_resource path="res://Objects/GoldenCarrot.tscn" type="PackedScene" id=24]
+[ext_resource path="res://Images/shadow.png" type="Texture" id=25]
+[ext_resource path="res://Objects/Tutorial.tscn" type="PackedScene" id=26]
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var obeliskScene = preload(\"res://Objects/Obelisk.tscn\")
+var bushScene = preload(\"res://Objects/FoodBush.tscn\")
+var treeScene = preload(\"res://Objects/Tree.tscn\")
+var smallRockScene = preload(\"res://Objects/SmallRock.tscn\")
+var bigRockScene = preload(\"res://Objects/BigRock.tscn\")
+var grassThing = preload(\"res://Objects/GrassThing.tscn\")
+var foxScene = preload(\"res://Objects/WolfEnemy.tscn\")
+var cobraScene = preload(\"res://Objects/CobraEnemy.tscn\")
+var spikesScene = preload(\"res://Objects/SpikesEnemy.tscn\")
+	
+export(int) var density = 80
+
+func _ready():
+	randomize()
+	gen_grass()
+	gen_objects()
+	gen_frontier()
+	gen_enemies()
+
+func gen_objects():
+	var x = 0
+	var y = 0
+	while y < 3000:
+		while x < 4000:
+			x += 80 + randi() % 75
+			var pos = Vector2(x - 2000, y - 1500 + randi() % 75)
+			if pos.distance_to(Vector2(0, 50)) > 300:
+				var object = null
+				var node = null
+				var val = randi() % 100
+				if val < 25:
+					object = self.smallRockScene.instance()
+				elif val < 40:
+					object = self.bigRockScene.instance()
+				elif val < 75:
+					object = self.treeScene.instance()
+				elif val < 82:
+					object = self.bushScene.instance()
+				elif val < 88:
+					object = self.obeliskScene.instance()
+				else:
+					object = self.spikesScene.instance()
+				object.position = pos
+				self.get_node(\"Objects\").add_child(object)
+		x = 0
+		y += randi() % 40 + 80
+
+func gen_grass():
+	var x = 0
+	var y = 0
+	while y < 3000:
+		while x < 4000:
+			x += randi() % self.density + int(self.density / 2)
+			var grass = self.grassThing.instance()
+			grass.position = Vector2(x - 2000, y - 1500 + randi() % self.density)
+			self.get_node(\"Objects\").add_child(grass)
+		x = 0
+		y += randi() % self.density + int(self.density / 2)
+
+func gen_frontier():
+	var c = 0
+	while c < 4:
+		var angle = 0
+		while angle < 365:
+			angle += 1 + randf() / 8
+			var pos = Vector2((1500 + 50 * c)*sin(angle), (1000 + 50 * c)*cos(angle))
+			var object = null
+			if randf() < 0.8:
+				object = smallRockScene.instance()
+			else:
+				object = bigRockScene.instance()
+			object.position = pos
+			self.get_node(\"Objects\").add_child(object)
+		c += 1
+
+func gen_enemies():
+	var angle = 0
+	while angle < 360:
+		var fox = self.foxScene.instance()
+		fox.position = Vector2(700*sin(angle), 500*cos(angle))
+		self.get_node(\"Objects\").add_child(fox)
+		angle += 36
+		
+		var cobra = self.cobraScene.instance()
+		cobra.position = Vector2(1100*sin(angle), 800*cos(angle))
+		self.get_node(\"Objects\").add_child(cobra)
+		angle += 20
+"
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 7.0
+height = 28.0
+
+[sub_resource type="GDScript" id=4]
 script/source = "extends Control
 
 func _ready():
@@ -28,17 +131,12 @@ func _ready():
 "
 
 [sub_resource type="DynamicFont" id=5]
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 11 )
-
-[sub_resource type="DynamicFont" id=3]
 size = 32
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 11 )
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=6]
 script/source = "extends RichTextLabel
 
 
@@ -47,492 +145,95 @@ func _on_Player_mystical_change(points):
 	self.bbcode_text = \"[right]\" + String(points) + \"[/right]\"
 "
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=7]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 11 )
+
+[sub_resource type="DynamicFont" id=8]
 size = 96
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 11 )
 
+[sub_resource type="DynamicFont" id=9]
+size = 32
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 11 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends ColorRect
+
+onready var tween = get_node(\"Tween\")
+
+func fadeout():
+	self.tween.interpolate_property(self, \"modulate:a\",
+		0, 1, 2, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
+	self.tween.start()
+
+func _ready():
+	self.tween.interpolate_property(self, \"modulate:a\",
+		1, 0, 2, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
+	self.tween.start()
+"
+
 [node name="GameScene" type="Node2D"]
+script = SubResource( 1 )
 
-[node name="Static" type="YSort" parent="."]
+[node name="Objects" type="YSort" parent="."]
+z_index = 20
 
-[node name="Tree" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 249.134, -30.5977 )
+[node name="Player" parent="Objects" instance=ExtResource( 2 )]
+position = Vector2( 3000, 20 )
 
-[node name="Tree3" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 718.711, 137.548 )
+[node name="MainTree" type="StaticBody2D" parent="Objects"]
+collision_layer = 8
+collision_mask = 0
 
-[node name="Tree4" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 782.278, -241.805 )
+[node name="Sprite" type="Sprite" parent="Objects/MainTree"]
+position = Vector2( 0, -52 )
+texture = ExtResource( 23 )
 
-[node name="Tree5" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 525.959, 367.209 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Objects/MainTree"]
+position = Vector2( 0, 6 )
+rotation = 1.5708
+shape = SubResource( 2 )
 
-[node name="Tree6" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 468.543, 402.069 )
+[node name="GoldenCarrot" parent="Objects" instance=ExtResource( 24 )]
+position = Vector2( 3005, -48 )
+upgradeUI = NodePath("../../GUI/Control/UpgradeUI")
 
-[node name="Tree7" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 208.123, 590.72 )
+[node name="Teleporter2" parent="Objects" instance=ExtResource( 22 )]
+targetPos = Vector2( 3000, 40 )
 
-[node name="Tree8" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -58.4485, 531.254 )
+[node name="Teleporter" parent="Objects" instance=ExtResource( 22 )]
+position = Vector2( 3005, 90 )
+targetPos = Vector2( 0, 30 )
 
-[node name="Tree9" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -316.818, 447.181 )
+[node name="SmallRock" parent="Objects" instance=ExtResource( 17 )]
+position = Vector2( -46.1308, -2.62552 )
 
-[node name="Tree10" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -480.862, 283.137 )
+[node name="SmallRock2" parent="Objects" instance=ExtResource( 17 )]
+position = Vector2( -22.2411, -12.864 )
 
-[node name="Tree11" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -694.12, 180.609 )
+[node name="BigRock" parent="Objects" instance=ExtResource( 8 )]
+position = Vector2( 38.8225, -7.31355 )
 
-[node name="Tree12" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -653.109, -118.771 )
+[node name="BigRock2" parent="Objects" instance=ExtResource( 8 )]
+position = Vector2( -16.3513, -26.084 )
 
-[node name="Tree13" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -355.779, 57.576 )
+[node name="SmallRock3" parent="Objects" instance=ExtResource( 17 )]
+position = Vector2( -64.6996, -14.708 )
 
-[node name="Tree14" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -183.532, -291.018 )
+[node name="SmallRock4" parent="Objects" instance=ExtResource( 17 )]
+position = Vector2( 70.1066, -26.6528 )
 
-[node name="Tree15" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 117.899, -631.409 )
+[node name="SmallRock5" parent="Objects" instance=ExtResource( 17 )]
+position = Vector2( 36.5473, -48.2673 )
 
-[node name="Tree16" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -230.695, -608.853 )
-
-[node name="Tree17" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 339.359, -539.135 )
-
-[node name="Tree18" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 558.768, -457.112 )
-
-[node name="Tree19" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 349.611, -264.361 )
-
-[node name="Tree20" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 124.051, -317.675 )
-
-[node name="Tree21" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -13.3364, -467.365 )
-
-[node name="Tree22" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -525.974, -360.736 )
-
-[node name="Tree23" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -919.681, 131.396 )
-
-[node name="Tree24" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -919.681, 131.396 )
-
-[node name="Tree25" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -245.049, 297.491 )
-
-[node name="Tree26" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -218.392, 367.21 )
-
-[node name="Tree27" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 201.972, 322.098 )
-
-[node name="Tree28" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 708.458, 518.951 )
-
-[node name="Tree29" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 927.867, 322.097 )
-
-[node name="Tree30" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 905.311, 41.1718 )
-
-[node name="Tree31" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 546.464, -133.125 )
-
-[node name="Tree32" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 484.948, -94.1647 )
-
-[node name="Tree33" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -91.2573, -725.735 )
-
-[node name="Tree34" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -435.75, -682.673 )
-
-[node name="Tree35" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -651.058, -516.579 )
-
-[node name="Tree36" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( -728.979, -364.838 )
-
-[node name="SmallRock" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -231.688, 102.913 )
-
-[node name="SmallRock2" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 88.8136, -205.091 )
-
-[node name="SmallRock5" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 219.66, -166.866 )
-
-[node name="SmallRock6" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -204.489, -149.224 )
-
-[node name="SmallRock7" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -141.789, -327.825 )
-
-[node name="SmallRock8" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 278.112, -395.275 )
-
-[node name="SmallRock9" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 147.012, -555.825 )
-
-[node name="SmallRock10" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -106.639, -619.476 )
-
-[node name="SmallRock11" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -179.789, -551.076 )
-
-[node name="SmallRock12" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -353.64, -423.775 )
-
-[node name="SmallRock13" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -484.74, -241.375 )
-
-[node name="SmallRock14" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -455.29, -79.874 )
-
-[node name="SmallRock15" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -551.24, 53.1265 )
-
-[node name="SmallRock16" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -474.29, 182.327 )
-
-[node name="SmallRock17" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -268.139, 257.377 )
-
-[node name="SmallRock18" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -87.6387, 270.677 )
-
-[node name="SmallRock19" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 100.462, 261.177 )
-
-[node name="SmallRock20" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 243.912, 380.878 )
-
-[node name="SmallRock21" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 387.363, 284.927 )
-
-[node name="SmallRock22" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 387.363, 95.8767 )
-
-[node name="SmallRock23" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 529.863, -58.9738 )
-
-[node name="SmallRock24" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 523.213, -234.724 )
-
-[node name="SmallRock25" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 464.313, -341.125 )
-
-[node name="SmallRock26" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 462.413, -507.375 )
-
-[node name="SmallRock27" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 389.263, -602.376 )
-
-[node name="SmallRock28" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 274.312, -698.326 )
-
-[node name="SmallRock29" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 155.562, -715.426 )
-
-[node name="SmallRock30" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -250.089, -704.976 )
-
-[node name="SmallRock31" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -517.04, -562.475 )
-
-[node name="SmallRock32" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -655.068, -358.465 )
-
-[node name="SmallRock33" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -754.418, -138.338 )
-
-[node name="SmallRock34" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -719.353, 89.581 )
-
-[node name="SmallRock35" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -544.031, 381.785 )
-
-[node name="SmallRock36" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -388.189, 336.98 )
-
-[node name="SmallRock37" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -148.582, 502.562 )
-
-[node name="SmallRock38" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -27.8044, 379.837 )
-
-[node name="SmallRock39" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 509.85, 218.151 )
-
-[node name="SmallRock40" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 398.813, -113.014 )
-
-[node name="SmallRock41" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 71.5449, -381.841 )
-
-[node name="SmallRock42" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -337.54, 537.627 )
-
-[node name="SmallRock43" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 116.349, 514.25 )
-
-[node name="SmallRock44" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 412.449, 430.485 )
-
-[node name="SmallRock45" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 595.564, 107.113 )
-
-[node name="SmallRock46" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 657.9, -146.13 )
-
-[node name="SmallRock47" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 706.601, -405.217 )
-
-[node name="SmallRock48" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 609.2, -514.307 )
-
-[node name="SmallRock49" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 22.8445, -822.094 )
-
-[node name="SmallRock50" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -789.482, 216.203 )
-
-[node name="SmallRock51" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -865.455, 190.878 )
-
-[node name="SmallRock52" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -788.764, -138.235 )
-
-[node name="SmallRock53" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -522.602, -303.92 )
-
-[node name="SmallRock54" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 209.855, 422.693 )
-
-[node name="SmallRock55" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 447.514, 557.107 )
-
-[node name="SmallRock56" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 500.111, 566.847 )
-
-[node name="SmallRock57" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 552.707, 531.783 )
-
-[node name="SmallRock58" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 593.616, 596.068 )
-
-[node name="SmallRock59" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 568.292, 245.423 )
-
-[node name="SmallRock60" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 685.173, -13.6643 )
-
-[node name="SmallRock61" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 696.861, 54.5165 )
-
-[node name="SmallRock62" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 768.938, -0.0281677 )
-
-[node name="SmallRock63" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 658.208, -213.286 )
-
-[node name="SmallRock64" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 760.736, -393.734 )
-
-[node name="SmallRock65" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 744.332, -350.673 )
-
-[node name="SmallRock66" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 816.101, -305.561 )
-
-[node name="SmallRock67" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 871.466, 200.926 )
-
-[node name="SmallRock68" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( 674.613, 358.818 )
-
-[node name="SmallRock69" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -520.859, 440.841 )
-
-[node name="SmallRock70" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -606.982, 430.588 )
-
-[node name="SmallRock71" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -650.044, 461.346 )
-
-[node name="SmallRock72" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -865.352, 282.948 )
-
-[node name="SmallRock73" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -643.892, 289.1 )
-
-[node name="SmallRock74" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -916.615, 6.1235 )
-
-[node name="SmallRock75" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -809.987, -262.499 )
-
-[node name="SmallRock76" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -541.365, -401.936 )
-
-[node name="SmallRock77" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -574.173, -346.572 )
-
-[node name="SmallRock78" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -596.729, -289.156 )
-
-[node name="SmallRock79" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -319.905, -604.941 )
-
-[node name="SmallRock80" parent="Static" instance=ExtResource( 17 )]
-position = Vector2( -18.4738, 594.632 )
-
-[node name="Tree2" parent="Static" instance=ExtResource( 18 )]
-position = Vector2( 227.817, 98.7789 )
-
-[node name="Enemies" type="YSort" parent="."]
-z_index = 1
-
-[node name="WolfEnemy" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 550.66, 49.2428 )
-
-[node name="WolfEnemy3" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 318.504, 443.407 )
-
-[node name="WolfEnemy4" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 57.9547, 410.003 )
-
-[node name="WolfEnemy5" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -244.349, 421.695 )
-
-[node name="WolfEnemy6" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -725.363, 338.185 )
-
-[node name="WolfEnemy7" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -419.719, 136.093 )
-
-[node name="WolfEnemy8" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -900.733, -84.3722 )
-
-[node name="WolfEnemy9" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -623.482, -406.718 )
-
-[node name="WolfEnemy10" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -235.998, -493.568 )
-
-[node name="WolfEnemy16" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -540.457, -627.621 )
-
-[node name="WolfEnemy17" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -220.094, -766.218 )
-
-[node name="WolfEnemy18" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 38.9233, -732.137 )
-
-[node name="WolfEnemy11" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 376.961, -416.74 )
-
-[node name="WolfEnemy12" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 345.227, -92.7231 )
-
-[node name="WolfEnemy13" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 852.964, -136.148 )
-
-[node name="WolfEnemy14" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 771.125, 274.718 )
-
-[node name="WolfEnemy15" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( 629.159, 503.534 )
-
-[node name="WolfEnemy2" parent="Enemies" instance=ExtResource( 8 )]
-position = Vector2( -624.474, -13.2892 )
-
-[node name="Interactables" type="YSort" parent="."]
-z_index = 1
-
-[node name="FoodBush" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -340, 200 )
-
-[node name="FoodBush2" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -100, 120 )
-
-[node name="FoodBush3" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( 100, 130 )
-
-[node name="FoodBush4" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( 829.872, -70.4225 )
-
-[node name="FoodBush5" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( 631.12, -342.663 )
-
-[node name="FoodBush6" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -26.9343, -643.297 )
-
-[node name="FoodBush7" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -409.407, -509.682 )
-
-[node name="FoodBush8" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -997.313, -170.634 )
-
-[node name="FoodBush9" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -573.086, 469.048 )
-
-[node name="FoodBush10" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -85.3908, 589.302 )
-
-[node name="FoodBush11" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( 562.642, 205.158 )
-
-[node name="FoodBush12" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( 952.247, 410.214 )
-
-[node name="FoodBush13" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( 504.39, 699.068 )
-
-[node name="FoodBush14" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -1051.18, 267.111 )
-
-[node name="FoodBush15" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -817.981, -604.753 )
-
-[node name="FoodBush16" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( -301.223, -859.157 )
-
-[node name="FoodBush17" parent="Interactables" instance=ExtResource( 9 )]
-position = Vector2( 422.239, -806.156 )
-
-[node name="Obelisk" parent="Interactables" instance=ExtResource( 16 )]
-position = Vector2( -193.223, 120.395 )
-
-[node name="Obelisk2" parent="Interactables" instance=ExtResource( 16 )]
-position = Vector2( -431.418, 386.756 )
-
-[node name="Obelisk3" parent="Interactables" instance=ExtResource( 16 )]
-position = Vector2( 741.497, 368.301 )
-
-[node name="Obelisk4" parent="Interactables" instance=ExtResource( 16 )]
-position = Vector2( 735.346, -156.64 )
-
-[node name="Obelisk5" parent="Interactables" instance=ExtResource( 16 )]
-position = Vector2( 181.697, -808.716 )
-
-[node name="Obelisk6" parent="Interactables" instance=ExtResource( 16 )]
-position = Vector2( -734.9, -525.74 )
-
-[node name="Obelisk7" parent="Interactables" instance=ExtResource( 16 )]
-position = Vector2( -1036.33, 124.285 )
-
-[node name="Player" parent="." instance=ExtResource( 2 )]
-z_index = 1
+[node name="CobraEnemy" parent="Objects" instance=ExtResource( 18 )]
+position = Vector2( -189.999, 36.0007 )
 
 [node name="Terrain" type="Node2D" parent="."]
 
@@ -541,19 +242,33 @@ current = true
 limit_smoothed = true
 smoothing_speed = 12.0
 script = ExtResource( 1 )
-trackedObject = NodePath("../Player")
+trackedObject = NodePath("../Objects/Player")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="GUI"]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
-script = SubResource( 2 )
+script = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel" type="Panel" parent="GUI/Control"]
+[node name="Tutorial" parent="GUI/Control" instance=ExtResource( 26 )]
+margin_top = 180.0
+margin_bottom = 180.0
+uiBars = NodePath("../Bars")
+
+[node name="Bars" type="Control" parent="GUI/Control"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="GUI/Control/Bars"]
 modulate = Color( 0.411765, 0.411765, 0.411765, 0.392157 )
 margin_left = 6.0
 margin_top = 6.0
@@ -563,7 +278,26 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HPBar" type="TextureProgress" parent="GUI/Control"]
+[node name="MysticPoints" type="Sprite" parent="GUI/Control/Bars"]
+position = Vector2( 220, 40 )
+texture = ExtResource( 19 )
+
+[node name="MysticPointsCount" type="RichTextLabel" parent="GUI/Control/Bars"]
+margin_left = 225.0
+margin_top = 26.0
+margin_right = 265.0
+margin_bottom = 58.0
+custom_fonts/normal_font = SubResource( 5 )
+bbcode_enabled = true
+bbcode_text = "[right]0[/right]"
+text = "0"
+scroll_active = false
+script = SubResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HPBar" type="TextureProgress" parent="GUI/Control/Bars"]
 margin_left = 12.0
 margin_top = 12.0
 margin_right = 262.0
@@ -577,14 +311,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tween" type="Tween" parent="GUI/Control/HPBar"]
+[node name="Tween" type="Tween" parent="GUI/Control/Bars/HPBar"]
 
-[node name="HPText" type="RichTextLabel" parent="GUI/Control/HPBar"]
+[node name="HPText" type="RichTextLabel" parent="GUI/Control/Bars/HPBar"]
 margin_left = 107.0
 margin_top = 1.0
 margin_right = 167.0
 margin_bottom = 13.0
-custom_fonts/normal_font = SubResource( 5 )
+custom_fonts/normal_font = SubResource( 7 )
 bbcode_enabled = true
 bbcode_text = "[center]100 / 100[/center]"
 text = "100 / 100"
@@ -593,7 +327,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FoodBar" type="TextureProgress" parent="GUI/Control"]
+[node name="FoodBar" type="TextureProgress" parent="GUI/Control/Bars"]
 margin_left = 12.0
 margin_top = 32.0
 margin_right = 124.0
@@ -607,26 +341,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tween" type="Tween" parent="GUI/Control/FoodBar"]
-
-[node name="MysticPoints" type="Sprite" parent="GUI/Control"]
-position = Vector2( 220, 40 )
-texture = ExtResource( 19 )
-
-[node name="MysticPointsCount" type="RichTextLabel" parent="GUI/Control"]
-margin_left = 225.0
-margin_top = 26.0
-margin_right = 265.0
-margin_bottom = 58.0
-custom_fonts/normal_font = SubResource( 3 )
-bbcode_enabled = true
-bbcode_text = "[right]0[/right]"
-text = "0"
-scroll_active = false
-script = SubResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Tween" type="Tween" parent="GUI/Control/Bars/FoodBar"]
 
 [node name="Death" type="Control" parent="GUI/Control"]
 modulate = Color( 1, 1, 1, 0 )
@@ -636,7 +351,7 @@ script = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-playerNode = NodePath("../../../Player")
+playerNode = NodePath("../../../Objects/Player")
 
 [node name="Tween" type="Tween" parent="GUI/Control/Death"]
 
@@ -658,13 +373,27 @@ __meta__ = {
 }
 
 [node name="DeathText" type="RichTextLabel" parent="GUI/Control/Death"]
-margin_top = 110.0
+margin_top = 125.0
 margin_right = 640.0
-margin_bottom = 238.0
-custom_fonts/normal_font = SubResource( 1 )
+margin_bottom = 253.0
+custom_fonts/normal_font = SubResource( 8 )
 bbcode_enabled = true
 bbcode_text = "[center]You died[/center]"
 text = "You died"
+
+[node name="DeathInstructions" type="RichTextLabel" parent="GUI/Control/Death"]
+margin_top = 260.0
+margin_right = 640.0
+margin_bottom = 388.0
+custom_fonts/normal_font = SubResource( 9 )
+bbcode_enabled = true
+bbcode_text = "[center]Press [E] to continue
+with the next generation...[/center]"
+text = "Press [E] to continue
+with the next generation..."
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ForegroundShadow" type="Sprite" parent="GUI/Control"]
 modulate = Color( 1, 1, 1, 0.235294 )
@@ -677,15 +406,74 @@ margin_left = 320.0
 margin_top = 180.0
 margin_right = 320.0
 margin_bottom = 180.0
-player = NodePath("../../../Player")
 
-[node name="Background" type="Sprite" parent="."]
+[node name="FadeOut" type="ColorRect" parent="GUI"]
+margin_right = 640.0
+margin_bottom = 360.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="GUI/FadeOut"]
+
+[node name="Grass" type="Sprite" parent="."]
 modulate = Color( 0.85098, 0.85098, 0.85098, 1 )
 z_index = -100
 texture = ExtResource( 10 )
 region_enabled = true
-region_rect = Rect2( 0, 0, 3000, 3000 )
-[connection signal="food_change" from="Player" to="GUI/Control/FoodBar" method="_on_Player_food_change"]
-[connection signal="hp_change" from="Player" to="GUI/Control/HPBar" method="_on_Player_hp_change"]
-[connection signal="hp_change" from="Player" to="GUI/Control/Death" method="_on_Player_hp_change"]
-[connection signal="mystical_change" from="Player" to="GUI/Control/MysticPointsCount" method="_on_Player_mystical_change"]
+region_rect = Rect2( 0, 0, 4000, 3000 )
+
+[node name="CaveDirt" type="Sprite" parent="."]
+modulate = Color( 0.85098, 0.85098, 0.85098, 1 )
+position = Vector2( 3000, 0 )
+z_index = -100
+z_as_relative = false
+texture = ExtResource( 20 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 128, 128 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="CaveDirt"]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CaveDirt/StaticBody2D"]
+position = Vector2( -21.7404, 16.9971 )
+scale = Vector2( 2.35877, 2.06232 )
+polygon = PoolVector2Array( -6.43848, 4.95869, -3.87805, 8.24609, -3.65466, 15.785, 0.702393, 22.3018, 3.71875, 22.9407, 20.4767, 22.9407, 22.8229, 18.3406, 22.7111, 12.335, 20.9236, 9.65166, 21.4822, 7.47942, 35.1119, 5.69052, 36.676, 2.7516, 36.676, -13.6041, 33.5479, -21.0153, 29.7494, -23.3153, 23.3813, -23.4431, 22.1525, -28.682, 20.9236, -35.9654, 17.3486, -39.2877, 6.95874, -39.2877, 1.14929, -34.5598, -3.20776, -26.7653, -4.77185, -23.9542, -10.5813, -22.2931, -16.8376, -20.2486, -18.0665, -17.9486, -17.6196, -6.19292, -14.7148, -2.87067, -9.6875, -0.187313, -7.67651, 3.00716, -7.45325, 5.94607, -19.1837, 2.1127, -22.3118, -15.7763, -16.5023, -30.5987, -2.87268, -38.6488, 11.9861, -47.5933, 27.7384, -40.0543, 30.9783, -28.682, 43.1558, -15.6486, 44.0496, 3.64605, 34.1064, 15.2739, 28.4087, 17.1906, 23.0463, 30.8629, -0.303101, 28.9463, -10.5813, 21.1518, -8.79382, 7.09608 )
+
+[node name="LilRabbit" parent="." instance=ExtResource( 21 )]
+position = Vector2( 2968.66, -1.07008 )
+
+[node name="LilRabbit2" parent="." instance=ExtResource( 21 )]
+position = Vector2( 3037.82, 17.9861 )
+
+[node name="LilRabbit3" parent="." instance=ExtResource( 21 )]
+position = Vector2( 2981.26, 34.5834 )
+
+[node name="LilRabbit4" parent="." instance=ExtResource( 21 )]
+position = Vector2( 3029.21, -20.1262 )
+
+[node name="LilRabbit5" parent="." instance=ExtResource( 21 )]
+position = Vector2( 3009.54, 5.07706 )
+
+[node name="Deco1" type="Sprite" parent="."]
+position = Vector2( 3047, -12 )
+z_index = -1
+texture = ExtResource( 9 )
+
+[node name="Deco2" type="Sprite" parent="."]
+position = Vector2( 2950, -35 )
+texture = ExtResource( 16 )
+
+[node name="CaveOverlay" type="Sprite" parent="."]
+position = Vector2( 3000, 0 )
+scale = Vector2( 8, 8 )
+z_index = 100
+texture = ExtResource( 25 )
+[connection signal="food_change" from="Objects/Player" to="GUI/Control/Bars/FoodBar" method="_on_Player_food_change"]
+[connection signal="hp_change" from="Objects/Player" to="GUI/Control/Death" method="_on_Player_hp_change"]
+[connection signal="hp_change" from="Objects/Player" to="GUI/Control/Bars/HPBar" method="_on_Player_hp_change"]
+[connection signal="mystical_change" from="Objects/Player" to="GUI/Control/Bars/MysticPointsCount" method="_on_Player_mystical_change"]

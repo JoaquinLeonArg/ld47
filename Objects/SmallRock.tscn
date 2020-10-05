@@ -1,25 +1,13 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Images/rock-small.png" type="Texture" id=1]
-
-[sub_resource type="GDScript" id=1]
-script/source = "extends StaticBody2D
-
-onready var player = get_tree().current_scene.get_node(\"Player\")
-
-func _process(delta):
-	if self.player.position.y < self.position.y:
-		self.z_index = 10
-	else:
-		self.z_index = -10
-"
+[ext_resource path="res://Images/rock_small.png" type="Texture" id=1]
+[ext_resource path="res://Objects/Shadow.tscn" type="PackedScene" id=2]
 
 [sub_resource type="CapsuleShape2D" id=2]
 radius = 8.0
 height = 15.0
 
 [node name="SmallRock" type="StaticBody2D"]
-script = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -4 )
@@ -29,3 +17,7 @@ texture = ExtResource( 1 )
 position = Vector2( 0, 4 )
 rotation = 1.5708
 shape = SubResource( 2 )
+
+[node name="Shadow" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, 6 )
+scale = Vector2( 0.35, 0.35 )

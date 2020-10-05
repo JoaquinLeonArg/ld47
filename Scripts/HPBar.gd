@@ -2,7 +2,7 @@ extends TextureProgress
 
 onready var tween = get_node("Tween")
 onready var text = get_node("HPText")
-onready var player = get_tree().current_scene.get_node("Player")
+onready var player = get_tree().current_scene.get_node("Objects/Player")
 
 func _on_Player_hp_change(hp):
 	self.tween.interpolate_property(self, "value",

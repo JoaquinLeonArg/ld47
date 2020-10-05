@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Images/carrot.png" type="Texture" id=1]
+[ext_resource path="res://Fonts/CyborgSister.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Scripts/GoldenCarrot.gd" type="Script" id=3]
+[ext_resource path="res://Images/arrow.png" type="Texture" id=4]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 8.0
+height = 26.0
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 2 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends RichTextLabel
+
+onready var posY = self.rect_position.y
+
+var t = 0
+
+func _process(delta):
+	self.t += 0.02
+	self.rect_position.y = self.posY + 4*sin(self.t)
+"
+
+[node name="GoldenCarrot" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="CarrotSprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="Node2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 0, 8 )
+rotation = 1.5708
+shape = SubResource( 1 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = -64.0
+margin_top = -64.0
+margin_right = 64.0
+custom_fonts/normal_font = SubResource( 2 )
+bbcode_enabled = true
+bbcode_text = "[center]Upgrade[/center]"
+text = "Upgrade"
+scroll_active = false
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="RichTextLabel"]
+position = Vector2( 64, 36 )
+texture = ExtResource( 4 )

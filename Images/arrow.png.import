@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/zorro.png-6022b15a424cf34d8d91930e378bb3ec.stex"
+path="res://.import/arrow.png-29e1e6f85776136688d8022bf1a3c956.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/zorro.png"
-dest_files=[ "res://.import/zorro.png-6022b15a424cf34d8d91930e378bb3ec.stex" ]
+source_file="res://Images/arrow.png"
+dest_files=[ "res://.import/arrow.png-29e1e6f85776136688d8022bf1a3c956.stex" ]
 
 [params]
 

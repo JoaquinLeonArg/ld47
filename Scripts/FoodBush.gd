@@ -1,6 +1,7 @@
 extends Interactable
 
 onready var berries = get_node("BerriesSprite")
+onready var eatSound = get_node("Eat")
 
 export(int) var replenishTime = 300
 
@@ -8,7 +9,6 @@ var timeUntilReplenish = replenishTime
 var hasBerries = true
 
 func _process(delta):
-	._process(delta)
 	if self.timeUntilReplenish > 0 and !self.hasBerries:
 		self.timeUntilReplenish -= 1
 	elif self.timeUntilReplenish == 0 and !self.hasBerries:
@@ -19,6 +19,7 @@ func _process(delta):
 func interact(player):
 	if !self.hasBerries:
 		return
+	self.eatSound.play()
 	self.hasBerries = false
 	self.timeUntilReplenish = self.replenishTime
 	self.berries.visible = false

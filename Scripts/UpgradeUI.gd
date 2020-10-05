@@ -1,13 +1,18 @@
 extends Control
 
-export(NodePath) var player
+onready var player = get_tree().current_scene.get_node("Objects/Player")
 
-onready var playerNode = get_node(player)
+var justActive = false
+
+func show():
+	self.visible = true
+	self.justActive = true
+	self.player.active = false
 
 func _process(delta):
-	if playerNode.active and Input.is_action_just_pressed("debug"):
-		playerNode.active = false
-		self.visible = true
-	elif !playerNode.active and self.visible and Input.is_action_just_pressed("debug"):
-		playerNode.active = true
+	if !self.visible:
+		return
+	if !self.justActive and self.visible and !self.player.active and Input.is_action_just_pressed("use"):
+		player.active = true
 		self.visible = false
+	self.justActive = false

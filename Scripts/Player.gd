@@ -2,27 +2,34 @@ extends KinematicBody2D
 
 class_name Player
 
+var deadBunnyScene = preload("res://Objects/DeadBunny.tscn")
+
 onready var animationPlayer = get_node("AnimationPlayer")
+onready var jumpSound = get_node("Jump")
+onready var damageSound = get_node("TakeDamage")
+onready var deathSound = get_node("Death")
 
 signal hp_change(hp)
 signal food_change(food)
 signal mystical_change(points)
 
 const JUMP_TIME = 16
-const INTERACT_MAX_DIST = 80
+const INTERACT_MAX_DIST = 60
 
 export(float) var moveSpeed = 500
 export(int) var maxHp = 100
 
 var moveDirection = Vector2.ZERO
 var knockback = Vector2.ZERO
-var active = true
+var active = false
 var jumpTime = 0
 var currentHp = maxHp
 var currentFood = 100
-var hungerCount = 100
+var hungerCount = 400
 var mysticalPoints = 0
 var closestInteract = null
+var detectionRange = 1
+var foodYieldExtra = 0
 
 func _ready():
 	pass # Replace with function body.
@@ -65,9 +72,14 @@ func process_input():
 		self.jumpTime = JUMP_TIME
 		self.animationPlayer.play("Front")
 		
+	if self.moveDirection != Vector2.ZERO:
+		self.jumpSound.play()
+		
 	self.moveDirection = self.moveDirection.normalized() * self.moveSpeed * Vector2(1, 0.8)
 
 func process_movement():
+	if self.currentHp <= 0:
+		return
 	self.jumpTime = max(0, self.jumpTime - 1)
 	if self.jumpTime == 0:
 		self.move_and_slide(self.moveDirection + self.knockback)
@@ -82,16 +94,20 @@ func process_knockback():
 	self.knockback = self.knockback.move_toward(Vector2.ZERO, 50)
 
 func process_hunger():
+	if self.position.x > 2800:
+		return
 	self.hungerCount -= 1
 	if self.hungerCount == 0:
-		self.hungerCount = 120
+		self.hungerCount = 75
 		self.get_hungry(4)
 
 func process_berries():
 	self.closestInteract = null
 	var closestInteractDist = INF
-	var interactables = get_tree().current_scene.get_node("Interactables")
-	for interactable in interactables.get_children():
+	var objects = get_tree().current_scene.get_node("Objects")
+	for interactable in objects.get_children():
+		if !interactable.has_method("interact"):
+			continue
 		var distance = self.global_position.distance_to(interactable.global_position)
 		if distance < closestInteractDist:
 			closestInteractDist = distance
@@ -105,11 +121,20 @@ func take_damage(damage):
 	if self.currentHp <= 0 and damage > 0:
 		return
 	self.currentHp = clamp(self.currentHp - damage, 0, self.maxHp)
+	if damage > 0 and self.currentHp > 0:
+		self.damageSound.play()
 	emit_signal("hp_change", self.currentHp)
 	if self.currentHp <= 0:
+		self.deathSound.play()
 		self.active = false
+		self.visible = false
+		var body = self.deadBunnyScene.instance()
+		body.position = self.position
+		get_tree().current_scene.get_node("Objects").add_child(body)
 
 func get_hungry(food):
+	if food < 0:
+		food -= self.foodYieldExtra
 	self.currentFood = clamp(self.currentFood - food, 0, 100)
 	emit_signal("food_change", self.currentFood)
 	if self.currentFood == 0:
@@ -140,7 +165,8 @@ func set_tooltip_visibility(visible):
 
 func respawn():
 	self.active = true
-	self.position = Vector2(0, 0)
+	self.visible = true
+	self.position = Vector2(3000, 0)
 	self.take_damage(-self.maxHp)
 	self.get_hungry(-100)
 

@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 onready var animationPlayer = get_node("AnimationPlayer")
 onready var timer = get_node("Timer")
-onready var player = get_tree().current_scene.get_node("Player")
+onready var player = get_tree().current_scene.get_node("Objects/Player")
 
 export(int) var speed = 100
 var targetPoint = Vector2.ZERO
@@ -24,17 +24,15 @@ func _process(delta):
 		self.animationPlayer.play("Left")
 	else:
 		self.animationPlayer.stop()
-		
-	if self.player.position.y < self.position.y:
-		self.z_index = 1
-	else:
-		self.z_index = -1
 
 func _physics_process(delta):
 	self.move_and_slide(self.velocity)
 
 func choose_next_point():
-	if self.position.distance_to(self.player.position) < 300:
+	if self.position.distance_to(Vector2(0, 0)) > 2000:
+		self.targetPoint = self.position.direction_to(Vector2(0, 0))
+		self.velocity = self.position.direction_to(Vector2(0, 0)) * self.speed * 3
+	elif self.position.distance_to(self.player.position) < 350 * self.player.detectionRange:
 		self.targetPoint = self.player.position
 		self.velocity = self.position.direction_to(self.player.position) * self.speed * 1.5
 	else:

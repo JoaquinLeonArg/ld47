@@ -1,14 +1,16 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Images/obelisk.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Obelisk.gd" type="Script" id=2]
+[ext_resource path="res://Objects/Shadow.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Sound/Obelisk.wav" type="AudioStream" id=4]
 
 [sub_resource type="CapsuleShape2D" id=1]
 height = 10.0
 
 [node name="Obelisk" type="Node2D"]
 script = ExtResource( 2 )
-replenishTime = 2500
+replenishTime = 2200
 
 [node name="ObeliskSprite" type="Sprite" parent="."]
 position = Vector2( 0, -8 )
@@ -24,3 +26,10 @@ collision_mask = 0
 position = Vector2( 0, 6 )
 rotation = 1.5708
 shape = SubResource( 1 )
+
+[node name="Shadow" parent="." instance=ExtResource( 3 )]
+position = Vector2( 0, 6 )
+scale = Vector2( 0.3, 0.3 )
+
+[node name="Use" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
